@@ -35,6 +35,7 @@
             this.buttonLeft = new System.Windows.Forms.Button();
             this.buttonRight = new System.Windows.Forms.Button();
             this.buttonDown = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTractor)).BeginInit();
             this.SuspendLayout();
             // 
@@ -104,11 +105,22 @@
             this.buttonDown.UseVisualStyleBackColor = true;
             this.buttonDown.Click += new System.EventHandler(this.buttonMove_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(204, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(177, 48);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "CREATE TRACTOR WITH LADLE";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.buttonCreateWithLadle_Click);
+            // 
             // TractorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 461);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonDown);
             this.Controls.Add(this.buttonRight);
             this.Controls.Add(this.buttonLeft);
@@ -117,7 +129,7 @@
             this.Controls.Add(this.pictureBoxTractor);
             this.Name = "TractorForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Tractor";
+            this.Text = "TractorForms";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTractor)).EndInit();
             this.ResumeLayout(false);
 
@@ -131,6 +143,7 @@
         private System.Windows.Forms.Button buttonLeft;
         private System.Windows.Forms.Button buttonRight;
         private System.Windows.Forms.Button buttonDown;
+        private System.Windows.Forms.Button button1;
     }
 }
 

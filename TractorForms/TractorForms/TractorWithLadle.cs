@@ -7,87 +7,20 @@ using System.Threading.Tasks;
 
 namespace TractorForms
 {
-    class TractorWithLadle
+    class TractorWithLadle : Tractor
     {
-        //начальные координаты трактора
-        private float _startPosX;
-        private float _startPosY;
-        //Ширина и высота экрана
-        private int _ScreenWidth;
-        private int _ScreenHeight;
-        //Ширина и высота трактора
-        private const int tractorWidth = 100;
-        private const int tractorHeight = 100;
-        //булевская переменная крана
-        public bool Crane { private set; get; }
-        //Скорость трактора
-        public int MaxSpeed { private set; get; }
-        //Вес трактора
-        public float Weight { private set; get; }
-        //цвета окраса трактора
-        public Color MainColor { private set; get; }
         public Color DopColor { private set; get; }
         public Color GlassColor { private set; get; }
-
-        //конструктор
-        public TractorWithLadle(int maxSpeed, float weight, Color mainColor, Color dopColor, Color glassColor, bool crane)
+        public bool Crane { private set; get; }
+        public TractorWithLadle(int maxSpeed, int weight, Color mainColor, Color dopColor, Color glassColor, bool crane)
+            : base(maxSpeed, weight, mainColor)
         {
-            MaxSpeed = maxSpeed;
-            Weight = weight;
-            MainColor = mainColor;
             DopColor = dopColor;
             GlassColor = glassColor;
             Crane = crane;
         }
 
-        //Начальная позиция установки трактора
-        public void SetPosition(int x, int y, int width, int height)
-        {
-            _startPosX = x;
-            _startPosY = y;
-            _ScreenHeight = height;
-            _ScreenWidth = width;
-        }
-
-        //Перемещение трактора
-        public void MoveTransport(Direction direction)
-        {
-            float step = MaxSpeed * 100 / Weight;
-            switch (direction)
-            {
-                // вправо
-                case Direction.Right:
-                    if (_startPosX + step < _ScreenWidth - tractorWidth / 2)
-                    {
-                        _startPosX += step;
-                    }
-                    break;
-                //влево
-                case Direction.Left:
-                    if (_startPosX - step > tractorWidth / 2)
-                    {
-                        _startPosX -= step;
-                    }
-                    break;
-                //вверх
-                case Direction.Up:
-                    if (_startPosY - step > tractorHeight / 2)
-                    {
-                        _startPosY -= step;
-                    }
-                    break;
-                //вниз
-                case Direction.Down:
-                    if (_startPosY + step < _ScreenHeight - tractorHeight / 2)
-                    {
-                        _startPosY += step;
-                    }
-                    break;
-            }
-        }
-
-        //Отрисовка трактора
-        public void DrawTractor(Graphics g)
+        public override void DrawTractor(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
             Brush Kuzov = new SolidBrush(MainColor);
@@ -107,6 +40,10 @@ namespace TractorForms
                 g.DrawRectangle(pen, _startPosX + 11, _startPosY - 25, 7, 1);
                 g.DrawRectangle(pen, _startPosX + 11, _startPosY - 30, 1, 5);
             }
+            //Труба
+            g.FillRectangle(Kuzov, _startPosX, _startPosY, 6, 10);
+            g.DrawRectangle(pen, _startPosX, _startPosY, 6, 10);
+
             //Кузов
             g.FillRectangle(Kuzov, _startPosX - 50, _startPosY - 30, 50, 30);
             g.DrawRectangle(pen, _startPosX - 50, _startPosY - 30, 50, 30);
@@ -123,6 +60,8 @@ namespace TractorForms
             //Колеса
             g.FillEllipse(Wheels, _startPosX - 50, _startPosY + 10, 40, 40);
             g.FillEllipse(Wheels, _startPosX + 5, _startPosY + 30, 20, 20);
+
         }
+
     }
 }

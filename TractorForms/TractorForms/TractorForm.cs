@@ -12,7 +12,7 @@ namespace TractorForms
 {
     public partial class TractorForm : Form
     {
-        private TractorWithLadle tractor;
+        private ITransport tractor;
 
         public TractorForm()
         {
@@ -27,35 +27,36 @@ namespace TractorForms
             pictureBoxTractor.Image = bmp;
         }
 
-        //Метод клика для создания трактора
         private void buttonCreate_Click(object sender, EventArgs e)
         {
             Random rnd = new Random();
-            tractor = new TractorWithLadle(rnd.Next(50, 70), rnd.Next(1000, 2000), Color.Red, Color.Black, Color.Blue, true);
+            tractor = new Tractor(rnd.Next(10, 50), rnd.Next(1000, 2000), Color.Green);
             tractor.SetPosition(rnd.Next(50, 100), rnd.Next(50, 300), pictureBoxTractor.Width, pictureBoxTractor.Height);
             Draw();
         }
 
-        //Метод клика по кнопке управления
+        private void buttonCreateWithLadle_Click(object sender, EventArgs e)
+        {
+            Random rnd = new Random();
+            tractor = new TractorWithLadle(rnd.Next(10, 50), rnd.Next(1000, 2000), Color.Red, Color.Black, Color.Blue, true);
+            tractor.SetPosition(rnd.Next(50, 100), rnd.Next(50, 300), pictureBoxTractor.Width, pictureBoxTractor.Height);
+            Draw();
+        }
         private void buttonMove_Click(object sender, EventArgs e)
         {
             //получаем имя кнопки
             string name = (sender as Button).Name;
             switch (name)
             {
-                //вверх
                 case "buttonUp":
                     tractor.MoveTransport(Direction.Up);
                     break;
-                //вниз
                 case "buttonDown":
                     tractor.MoveTransport(Direction.Down);
                     break;
-                //влево
                 case "buttonLeft":
                     tractor.MoveTransport(Direction.Left);
                     break;
-                //вправо
                 case "buttonRight":
                     tractor.MoveTransport(Direction.Right);
                     break;
