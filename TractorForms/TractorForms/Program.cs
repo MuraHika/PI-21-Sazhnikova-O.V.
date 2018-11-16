@@ -16,7 +16,7 @@ namespace TractorForms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TractorForm());
+            Application.Run(new FormGarage());
         }
     }
 }

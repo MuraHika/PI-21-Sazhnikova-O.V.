@@ -46,6 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Direction.cs" />
+    <Compile Include="FormGarage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGarage.Designer.cs">
+      <DependentUpon>FormGarage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Garage.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="TractorForm.cs">
       <SubType>Form</SubType>
@@ -58,6 +65,9 @@
     <Compile Include="Tractor.cs" />
     <Compile Include="TractorWithLadle.cs" />
     <Compile Include="Vehicle.cs" />
+    <EmbeddedResource Include="FormGarage.resx">
+      <DependentUpon>FormGarage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
