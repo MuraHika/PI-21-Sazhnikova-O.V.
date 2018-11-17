@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Garage.cs" />
     <Compile Include="ITransport.cs" />
+    <Compile Include="MultiLevelGarage.cs" />
     <Compile Include="TractorForm.cs">
       <SubType>Form</SubType>
     </Compile>

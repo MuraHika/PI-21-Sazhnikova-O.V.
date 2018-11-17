@@ -12,48 +12,67 @@ namespace TractorForms
 {
     public partial class FormGarage : Form
     {
-        Garage<ITransport> garage;
+        MultiLevelGarage garage;
+        private const int countLevel = 5;
 
         public FormGarage()
         {
             InitializeComponent();
-            garage = new Garage<ITransport>(20, pictureBoxGarage.Width, pictureBoxGarage.Height);
-            Draw();
+            garage = new MultiLevelGarage(countLevel, pictureBoxGarage.Width, pictureBoxGarage.Height);
+            for (int i = 0; i < countLevel; i++)
+            {
+                listBoxLevel.Items.Add("Уровень " + (i + 1));
+            }
+            listBoxLevel.SelectedIndex = 0;
         }
 
         private void Draw()
         {
             Bitmap bmp = new Bitmap(pictureBoxGarage.Width, pictureBoxGarage.Height);
             Graphics gr = Graphics.FromImage(bmp);
-            garage.Draw(gr);
+            garage[listBoxLevel.SelectedIndex].Draw(gr);
             pictureBoxGarage.Image = bmp;
         }
 
         private void buttonSetTrator_Click(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (listBoxLevel.SelectedIndex > -1)
             {
-                var tractor = new Tractor(100, 1000, dialog.Color);
-                int place = garage + tractor;
-                Draw();
+                ColorDialog dialog = new ColorDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    var tractor = new Tractor(100, 1000, dialog.Color);
+                    int place = garage[listBoxLevel.SelectedIndex] + tractor;
+                    if (place == -1)
+                    {
+                        MessageBox.Show("Нет свободных мест", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Draw();
+                }
             }
         }
 
         private void buttonSetTractorWithLadle_Click(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (listBoxLevel.SelectedIndex > -1)
             {
-                ColorDialog dialogDop = new ColorDialog();
-                if (dialogDop.ShowDialog() == DialogResult.OK)
+                ColorDialog dialog = new ColorDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    ColorDialog dialogGlass = new ColorDialog();
-                    if (dialogGlass.ShowDialog() == DialogResult.OK)
+                    ColorDialog dialogDop = new ColorDialog();
+                    if (dialogDop.ShowDialog() == DialogResult.OK)
                     {
-                        var tractor = new TractorWithLadle(100, 1000, dialog.Color, dialogDop.Color, dialogGlass.Color, true);
-                        int place = garage + tractor;
-                        Draw();
+                        ColorDialog dialogGlass = new ColorDialog();
+                        if (dialogGlass.ShowDialog() == DialogResult.OK)
+                        {
+                            var tractor = new TractorWithLadle(100, 1000, dialog.Color, dialogDop.Color, dialogGlass.Color, true);
+                            int place = garage[listBoxLevel.SelectedIndex] + tractor;
+                            if (place == -1)
+                            {
+                                MessageBox.Show("Нет свободных мест", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            Draw();
+                        }
                     }
                 }
             }
@@ -61,24 +80,32 @@ namespace TractorForms
 
         private void buttonTakeTractor_Click(object sender, EventArgs e)
         {
-            if (maskedTextBoxTakePlace.Text != "")
+            if (listBoxLevel.SelectedIndex > -1)
             {
-                var tractor = garage - Convert.ToInt32(maskedTextBoxTakePlace.Text);
-                if (tractor != null)
+                if (maskedTextBoxTakePlace.Text != "")
                 {
-                    Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
-                    Graphics gr = Graphics.FromImage(bmp);
-                    tractor.SetPosition(60, 50, pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
-                    tractor.DrawTractor(gr);
-                    pictureBoxViewTractor.Image = bmp;
+                    var tractor = garage[listBoxLevel.SelectedIndex] - Convert.ToInt32(maskedTextBoxTakePlace.Text);
+                    if (tractor != null)
+                    {
+                        Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
+                        Graphics gr = Graphics.FromImage(bmp);
+                        tractor.SetPosition(60, 50, pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
+                        tractor.DrawTractor(gr);
+                        pictureBoxViewTractor.Image = bmp;
+                    }
+                    else
+                    {
+                        Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
+                        pictureBoxViewTractor.Image = bmp;
+                    }
+                    Draw();
                 }
-                else
-                {
-                    Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
-                    pictureBoxViewTractor.Image = bmp;
-                }
-                Draw();
             }
+        }
+
+        private void listBoxLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Draw();
         }
     }
 }
