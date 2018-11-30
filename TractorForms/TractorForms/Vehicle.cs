@@ -16,6 +16,7 @@ namespace TractorForms
         public int MaxSpeed { protected set; get; }
         public float Weight { protected set; get; }
         public Color MainColor { protected set; get; }
+
         public void SetPosition(int x, int y, int width, int height)
         {
             _startPosX = x;
@@ -23,11 +24,11 @@ namespace TractorForms
             _screenWidth = width;
             _screenHeight = height;
         }
-        public void SwitchColor(Graphics g)
+        public void SetMainColor(Color color)
         {
-            MainColor = Color.Aqua;
+            MainColor = color;
         }
         public abstract void DrawTractor(Graphics g);
-        public abstract void MoveTransport(Direction direction);
+        public abstract void MoveTransport(Direction direction);
     }
 }

@@ -13,6 +13,7 @@ namespace TractorForms
     public partial class FormGarage : Form
     {
         MultiLevelGarage garage;
+        FormTractorConfig form;
         private const int countLevel = 5;
 
         public FormGarage()
@@ -36,44 +37,24 @@ namespace TractorForms
 
         private void buttonSetTrator_Click(object sender, EventArgs e)
         {
-            if (listBoxLevel.SelectedIndex > -1)
-            {
-                ColorDialog dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    var tractor = new Tractor(100, 1000, dialog.Color);
-                    int place = garage[listBoxLevel.SelectedIndex] + tractor;
-                    if (place == -1)
-                    {
-                        MessageBox.Show("Нет свободных мест", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    Draw();
-                }
-            }
+            form = new FormTractorConfig();
+            form.AddEvent(AddTractor);
+            form.Show();
         }
 
-        private void buttonSetTractorWithLadle_Click(object sender, EventArgs e)
+        private void AddTractor(ITransport tractor)
         {
-            if (listBoxLevel.SelectedIndex > -1)
+
+            if (tractor != null && listBoxLevel.SelectedIndex > -1)
             {
-                ColorDialog dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
+                int place = garage[listBoxLevel.SelectedIndex] + tractor;
+                if (place > -1)
                 {
-                    ColorDialog dialogDop = new ColorDialog();
-                    if (dialogDop.ShowDialog() == DialogResult.OK)
-                    {
-                        ColorDialog dialogGlass = new ColorDialog();
-                        if (dialogGlass.ShowDialog() == DialogResult.OK)
-                        {
-                            var tractor = new TractorWithLadle(100, 1000, dialog.Color, dialogDop.Color, dialogGlass.Color, true);
-                            int place = garage[listBoxLevel.SelectedIndex] + tractor;
-                            if (place == -1)
-                            {
-                                MessageBox.Show("Нет свободных мест", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                            Draw();
-                        }
-                    }
+                    Draw();
+                }
+                else
+                {
+                    MessageBox.Show("Трактор не удалось поставить");
                 }
             }
         }

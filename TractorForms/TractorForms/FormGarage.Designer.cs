@@ -37,7 +37,6 @@
             this.maskedTextBoxTakePlace = new System.Windows.Forms.MaskedTextBox();
             this.labelPlace = new System.Windows.Forms.Label();
             this.labelRemoveTractor = new System.Windows.Forms.Label();
-            this.buttonSetTractorWithLadle = new System.Windows.Forms.Button();
             this.buttonSetTrator = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGarage)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -61,7 +60,6 @@
             this.groupBox1.Controls.Add(this.maskedTextBoxTakePlace);
             this.groupBox1.Controls.Add(this.labelPlace);
             this.groupBox1.Controls.Add(this.labelRemoveTractor);
-            this.groupBox1.Controls.Add(this.buttonSetTractorWithLadle);
             this.groupBox1.Controls.Add(this.buttonSetTrator);
             this.groupBox1.Location = new System.Drawing.Point(1013, 0);
             this.groupBox1.Name = "groupBox1";
@@ -77,6 +75,7 @@
             this.listBoxLevel.Name = "listBoxLevel";
             this.listBoxLevel.Size = new System.Drawing.Size(146, 95);
             this.listBoxLevel.TabIndex = 8;
+            this.listBoxLevel.SelectedIndexChanged += new System.EventHandler(this.listBoxLevel_SelectedIndexChanged);
             // 
             // labelLevel
             // 
@@ -130,23 +129,13 @@
             this.labelRemoveTractor.TabIndex = 2;
             this.labelRemoveTractor.Text = "Забрать трактор";
             // 
-            // buttonSetTractorWithLadle
-            // 
-            this.buttonSetTractorWithLadle.Location = new System.Drawing.Point(10, 199);
-            this.buttonSetTractorWithLadle.Name = "buttonSetTractorWithLadle";
-            this.buttonSetTractorWithLadle.Size = new System.Drawing.Size(146, 42);
-            this.buttonSetTractorWithLadle.TabIndex = 1;
-            this.buttonSetTractorWithLadle.Text = "Поставить в гараж ТРАКТОР С КОВШОМ";
-            this.buttonSetTractorWithLadle.UseVisualStyleBackColor = true;
-            this.buttonSetTractorWithLadle.Click += new System.EventHandler(this.buttonSetTractorWithLadle_Click);
-            // 
             // buttonSetTrator
             // 
             this.buttonSetTrator.Location = new System.Drawing.Point(10, 153);
             this.buttonSetTrator.Name = "buttonSetTrator";
             this.buttonSetTrator.Size = new System.Drawing.Size(146, 40);
             this.buttonSetTrator.TabIndex = 0;
-            this.buttonSetTrator.Text = "Поставить в гараж ОБЫЧНЫЙ ТРАКТОР";
+            this.buttonSetTrator.Text = "Заказать Трактор";
             this.buttonSetTrator.UseVisualStyleBackColor = true;
             this.buttonSetTrator.Click += new System.EventHandler(this.buttonSetTrator_Click);
             // 
@@ -176,7 +165,6 @@
         private System.Windows.Forms.MaskedTextBox maskedTextBoxTakePlace;
         private System.Windows.Forms.Label labelPlace;
         private System.Windows.Forms.Label labelRemoveTractor;
-        private System.Windows.Forms.Button buttonSetTractorWithLadle;
         private System.Windows.Forms.Button buttonSetTrator;
         private System.Windows.Forms.ListBox listBoxLevel;
         private System.Windows.Forms.Label labelLevel;

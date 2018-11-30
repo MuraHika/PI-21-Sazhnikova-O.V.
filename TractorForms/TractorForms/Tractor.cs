@@ -85,7 +85,6 @@ namespace TractorForms
             //Колеса
             g.FillEllipse(Wheels, _startPosX - 50, _startPosY + 10, 35, 35);
             g.FillEllipse(Wheels, _startPosX - 10, _startPosY + 20, 25, 25);
-
         }
     }
 }

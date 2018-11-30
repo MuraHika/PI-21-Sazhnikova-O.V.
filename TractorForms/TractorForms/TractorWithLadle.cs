@@ -62,5 +62,9 @@ namespace TractorForms
             g.FillEllipse(Wheels, _startPosX - 10, _startPosY + 20, 25, 25);
         }
 
+        public void SetDopColor(Color color)
+        {
+            DopColor = color;
+        }
     }
 }

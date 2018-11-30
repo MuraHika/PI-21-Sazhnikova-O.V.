@@ -10,6 +10,7 @@ namespace TractorForms
     {
         List<Garage<ITransport>> garageStages;
         private const int countPlaces = 20;
+
         public MultiLevelGarage(int countStages, int screenWidth, int screenHeight)
         {
             garageStages = new List<Garage<ITransport>>();
