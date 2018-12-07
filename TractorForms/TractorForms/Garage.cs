@@ -82,5 +82,26 @@ namespace TractorForms
                 g.DrawLine(pen, i * _placeSizeWidth, 0, i * _placeSizeWidth, 480);
             }
         }
+
+        public T this[int ind]
+        {
+            get
+            {
+                if (_places.ContainsKey(ind))
+                {
+                    return _places[ind];
+                }
+                return null;
+            }
+            set
+            {
+                if (CheckFreePlace(ind))
+                {
+                    _places.Add(ind, value);
+                    _places[ind].SetPosition(5 + ind / 5 * _placeSizeWidth + 50, ind % 5 * _placeSizeHeight + 33, ScreenWidth, ScreenHeigth);
+
+                }
+            }
+        }
     }
 }
