@@ -28,7 +28,7 @@ namespace TractorForms
         {
             if (p._places.Count == p._maxCount)
             {
-                return -1;
+                throw new GarageOverflowException();
             }
             for (int i = 0; i < p._maxCount; i++)
             {
@@ -50,7 +50,7 @@ namespace TractorForms
                 p._places.Remove(index);
                 return tractor;
             }
-            return null;
+            throw new GarageNotFoundException(index);
         }
 
         private bool CheckFreePlace(int index)
@@ -100,6 +100,10 @@ namespace TractorForms
                     _places.Add(ind, value);
                     _places[ind].SetPosition(5 + ind / 5 * _placeSizeWidth + 50, ind % 5 * _placeSizeHeight + 33, ScreenWidth, ScreenHeigth);
 
+                }
+                else
+                {
+                    throw new GarageOccupiedPlaceException(ind);
                 }
             }
         }

@@ -54,19 +54,23 @@ namespace TractorForms
                         WriteToFile("Level" + Environment.NewLine, fs);
                         for (int i = 0; i < countPlaces; i++)
                         {
-                            var tractor = level[i];
-                            if (tractor != null)
+                            try
                             {
-                                if (tractor.GetType().Name == "Tractor")
+                                var tractor = level[i];
+                                if (tractor != null)
                                 {
-                                    WriteToFile(i + ":Tractor:", fs);
+                                    if (tractor.GetType().Name == "Tractor")
+                                    {
+                                        WriteToFile(i + ":Tractor:", fs);
+                                    }
+                                    if (tractor.GetType().Name == "TractorWithLadle")
+                                    {
+                                        WriteToFile(i + ":TractorWithLadle:", fs);
+                                    }
+                                    WriteToFile(tractor + Environment.NewLine, fs);
                                 }
-                                if (tractor.GetType().Name == "TractorWithLadle")
-                                {
-                                    WriteToFile(i + ":TractorWithLadle:", fs);
-                                }
-                                WriteToFile(tractor + Environment.NewLine, fs);
                             }
+                            finally { }
                         }
                     }
                 }
@@ -83,7 +87,7 @@ namespace TractorForms
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw new FileNotFoundException();
             }
 
             string bufferTextFromFile = "";
@@ -112,7 +116,7 @@ namespace TractorForms
             }
             else
             {
-                return false;
+                throw new Exception("Неверный фомат файла!");
             }
             int counter = -1;
             ITransport tractor = null;

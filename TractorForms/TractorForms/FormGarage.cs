@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,10 +16,12 @@ namespace TractorForms
         MultiLevelGarage garage;
         FormTractorConfig form;
         private const int countLevel = 5;
+        private Logger logger;
 
         public FormGarage()
         {
             InitializeComponent();
+            logger = LogManager.GetCurrentClassLogger();
             garage = new MultiLevelGarage(countLevel, pictureBoxGarage.Width, pictureBoxGarage.Height);
             for (int i = 0; i < countLevel; i++)
             {
@@ -44,17 +47,23 @@ namespace TractorForms
 
         private void AddTractor(ITransport tractor)
         {
-
             if (tractor != null && listBoxLevel.SelectedIndex > -1)
             {
-                int place = garage[listBoxLevel.SelectedIndex] + tractor;
-                if (place > -1)
+                try
                 {
+                    int place = garage[listBoxLevel.SelectedIndex] + tractor;
+                    logger.Info("Добавлен трактор " + tractor.ToString() + " на место " + place);
                     Draw();
                 }
-                else
+                catch (GarageOverflowException ex)
                 {
-                    MessageBox.Show("Трактор не удалось поставить");
+
+                    MessageBox.Show(ex.Message, "Переполнение!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -65,21 +74,28 @@ namespace TractorForms
             {
                 if (maskedTextBoxTakePlace.Text != "")
                 {
-                    var tractor = garage[listBoxLevel.SelectedIndex] - Convert.ToInt32(maskedTextBoxTakePlace.Text);
-                    if (tractor != null)
+                    try
                     {
+                        var tractor = garage[listBoxLevel.SelectedIndex] - Convert.ToInt32(maskedTextBoxTakePlace.Text);
+
                         Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
                         Graphics gr = Graphics.FromImage(bmp);
                         tractor.SetPosition(60, 50, pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
                         tractor.DrawTractor(gr);
                         pictureBoxViewTractor.Image = bmp;
+                        logger.Info("Изъят трактор " + tractor.ToString() + " с места " + maskedTextBoxTakePlace.Text);
+                        Draw();
                     }
-                    else
+                    catch (GarageNotFoundException ex)
                     {
+                        MessageBox.Show(ex.Message, "Не найдено!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
                         pictureBoxViewTractor.Image = bmp;
                     }
-                    Draw();
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -93,13 +109,15 @@ namespace TractorForms
         {
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if (garage.SaveData(saveFileDialog.FileName))
+                try
                 {
-                    MessageBox.Show("Сохранение прошло успешно", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    garage.SaveData(saveFileDialog.FileName);
+                    MessageBox.Show("Сохранение прошло успешно!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Сохранено в файл " + saveFileDialog.FileName);
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Не сохранилось", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -108,13 +126,19 @@ namespace TractorForms
         {
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if (garage.LoadData(openFileDialog.FileName))
+                try
                 {
-                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    garage.LoadData(openFileDialog.FileName);
+                    MessageBox.Show("Загрузили!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Загружено из файла " + openFileDialog.FileName);
                 }
-                else
+                catch (GarageOccupiedPlaceException ex)
                 {
-                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Занятое место", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при загрузки!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 Draw();
             }
