@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TractorForms
 {
-    class TractorWithLadle : Tractor
+    class TractorWithLadle : Tractor, IComparable<TractorWithLadle>, IEquatable<TractorWithLadle>
     {
         public Color DopColor { private set; get; }
         public Color GlassColor { private set; get; }
@@ -84,6 +84,76 @@ namespace TractorForms
         public override string ToString()
         {
             return base.ToString() + ";" + DopColor.Name + ";" + GlassColor.Name + ";" + Crane;
+        }
+
+        public int CompareTo(TractorWithLadle other)
+        {
+            var res = (this is Tractor).CompareTo(other is Tractor);
+            if (res != 0)
+            {
+                return res;
+            }
+            if (DopColor != other.DopColor)
+            {
+                DopColor.Name.CompareTo(other.DopColor.Name);
+            }
+            if (GlassColor != other.GlassColor)
+            {
+                GlassColor.Name.CompareTo(other.GlassColor.Name);
+            }
+            if (Crane != other.Crane)
+            {
+                return Crane.CompareTo(other.Crane);
+            }
+            return 0;
+        }
+
+        public bool Equals(TractorWithLadle other)
+        {
+            var res = (this is Tractor).Equals(other as Tractor);
+            if (other == null)
+            {
+                return false;
+            }
+            if (GetType().Name != other.GetType().Name)
+            {
+                return false;
+            }
+            if (DopColor != other.DopColor)
+            {
+                return false;
+            }
+            if (GlassColor != other.GlassColor)
+            {
+                return false;
+            }
+            if (Crane != other.Crane)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            TractorWithLadle tractorObj = obj as TractorWithLadle;
+            if (tractorObj == null)
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(tractorObj);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

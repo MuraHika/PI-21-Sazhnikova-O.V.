@@ -67,6 +67,7 @@
       <DependentUpon>FormTractorConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Garage.cs" />
+    <Compile Include="GarageAlreadyHaveException.cs" />
     <Compile Include="GarageNotFoundException.cs" />
     <Compile Include="GarageOccupiedPlaceException.cs" />
     <Compile Include="GarageOverflowException.cs" />

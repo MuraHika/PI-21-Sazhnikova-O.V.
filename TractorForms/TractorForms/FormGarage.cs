@@ -32,10 +32,13 @@ namespace TractorForms
 
         private void Draw()
         {
-            Bitmap bmp = new Bitmap(pictureBoxGarage.Width, pictureBoxGarage.Height);
-            Graphics gr = Graphics.FromImage(bmp);
-            garage[listBoxLevel.SelectedIndex].Draw(gr);
-            pictureBoxGarage.Image = bmp;
+            if (listBoxLevel.SelectedIndex > -1)
+            {
+                Bitmap bmp = new Bitmap(pictureBoxGarage.Width, pictureBoxGarage.Height);
+                Graphics gr = Graphics.FromImage(bmp);
+                garage[listBoxLevel.SelectedIndex].Draw(gr);
+                pictureBoxGarage.Image = bmp;
+            }
         }
 
         private void buttonSetTrator_Click(object sender, EventArgs e)
@@ -57,12 +60,14 @@ namespace TractorForms
                 }
                 catch (GarageOverflowException ex)
                 {
-
                     MessageBox.Show(ex.Message, "Переполнение!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (GarageAlreadyHaveException ex)
+                {
+                    MessageBox.Show(ex.Message, "Дублирование!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-
                     MessageBox.Show(ex.Message, "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -77,7 +82,6 @@ namespace TractorForms
                     try
                     {
                         var tractor = garage[listBoxLevel.SelectedIndex] - Convert.ToInt32(maskedTextBoxTakePlace.Text);
-
                         Bitmap bmp = new Bitmap(pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
                         Graphics gr = Graphics.FromImage(bmp);
                         tractor.SetPosition(60, 50, pictureBoxViewTractor.Width, pictureBoxViewTractor.Height);
@@ -142,6 +146,13 @@ namespace TractorForms
                 }
                 Draw();
             }
+        }
+
+        private void buttonSort_Click(object sender, EventArgs e)
+        {
+            garage.Sort();
+            Draw();
+            logger.Info("Сортировка уровней");
         }
     }
 }

@@ -37,45 +37,32 @@ namespace TractorForms
             }
         }
 
-        public bool SaveData(string filename)
+        public void SaveData(string filename)
         {
-
             if (File.Exists(filename))
             {
                 File.Delete(filename);
             }
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
-                using (BufferedStream bs = new BufferedStream(fs))
+                WriteToFile("CountLeveles:" + garageStages.Count + Environment.NewLine, fs);
+                foreach (var level in garageStages)
                 {
-                    WriteToFile("CountLeveles:" + garageStages.Count + Environment.NewLine, fs);
-                    foreach (var level in garageStages)
+                    WriteToFile("Level" + Environment.NewLine, fs);
+                    foreach (ITransport tractor in level)
                     {
-                        WriteToFile("Level" + Environment.NewLine, fs);
-                        for (int i = 0; i < countPlaces; i++)
+                        if (tractor.GetType().Name == "Tractor")
                         {
-                            try
-                            {
-                                var tractor = level[i];
-                                if (tractor != null)
-                                {
-                                    if (tractor.GetType().Name == "Tractor")
-                                    {
-                                        WriteToFile(i + ":Tractor:", fs);
-                                    }
-                                    if (tractor.GetType().Name == "TractorWithLadle")
-                                    {
-                                        WriteToFile(i + ":TractorWithLadle:", fs);
-                                    }
-                                    WriteToFile(tractor + Environment.NewLine, fs);
-                                }
-                            }
-                            finally { }
+                            WriteToFile(level.GetKey + ":Tractor:", fs);
                         }
+                        if (tractor.GetType().Name == "TractorWithLadle")
+                        {
+                            WriteToFile(level.GetKey + ":TractorWithLadle:", fs);
+                        }
+                        WriteToFile(tractor + Environment.NewLine, fs);
                     }
                 }
             }
-            return true;
         }
 
         private void WriteToFile(string text, FileStream stream)
@@ -83,7 +70,8 @@ namespace TractorForms
             byte[] info = new UTF8Encoding(true).GetBytes(text);
             stream.Write(info, 0, info.Length);
         }
-        public bool LoadData(string filename)
+
+        public void LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
@@ -93,14 +81,11 @@ namespace TractorForms
             string bufferTextFromFile = "";
             using (FileStream fs = new FileStream(filename, FileMode.Open))
             {
-                using (BufferedStream bs = new BufferedStream(fs))
+                byte[] b = new byte[fs.Length];
+                UTF8Encoding temp = new UTF8Encoding(true);
+                while (fs.Read(b, 0, b.Length) > 0)
                 {
-                    byte[] b = new byte[fs.Length];
-                    UTF8Encoding temp = new UTF8Encoding(true);
-                    while (bs.Read(b, 0, b.Length) > 0)
-                    {
-                        bufferTextFromFile += temp.GetString(b);
-                    }
+                    bufferTextFromFile += temp.GetString(b);
                 }
             }
             bufferTextFromFile = bufferTextFromFile.Replace("\r", "");
@@ -119,12 +104,14 @@ namespace TractorForms
                 throw new Exception("Неверный фомат файла!");
             }
             int counter = -1;
+            int counterTractor = 0;
             ITransport tractor = null;
             for (int i = 1; i < strs.Length; ++i)
             {
                 if (strs[i] == "Level")
                 {
                     counter++;
+                    counterTractor = 0;
                     garageStages.Add(new Garage<ITransport>(countPlaces, screenWidth, screenHeight));
                     continue;
                 }
@@ -140,9 +127,13 @@ namespace TractorForms
                 {
                     tractor = new TractorWithLadle(strs[i].Split(':')[2]);
                 }
-                garageStages[counter][Convert.ToInt32(strs[i].Split(':')[0])] = tractor;
+                garageStages[counter][counterTractor++] = tractor;
             }
-            return true;
+        }
+
+        public void Sort()
+        {
+            garageStages.Sort();
         }
     }
 }
